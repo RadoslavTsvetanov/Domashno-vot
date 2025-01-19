@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio-vot
+    ports:
+      - "5010:9000"  # Map MinIO API to port 5010
+      - "5011:9001"  # Map MinIO console to port 5011
+    volumes:
+      - ./minio/data:/data  # Persistent data storage
+    environment:
+      MINIO_ROOT_USER: "minioadmin"       # MinIO root username
+      MINIO_ROOT_PASSWORD: "minioadmin"  # MinIO root password
+      MINIO_DEFAULT_BUCKETS: "your_bucket_name"
+    command: server /data --console-address ":5011"
+    network_mode: host  # Use host network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=cant-bruteforce-this
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=cant-bruteforce-this
+    ports:
+      - "8080:8080"
+    command: start-dev
+    network_mode: host  # Use host network
+
+  py-server:
+    image: keycloak-trash:latest  # Local image named keycloak-trash
+    container_name: py-server
+    environment:
+      MINIO_ENDPOINT: "localhost:9000"  # Use localhost for MinIO
+      MINIO_ACCESS_KEY: "minioadmin"
+      MINIO_SECRET_KEY: "minioadmin"
+      MINIO_SECURE: "false"
+      BUCKET_NAME: "secure-name"
+      KEYCLOAK_URL: "http://localhost:8080"  # Use localhost for Keycloak
+      KC_ADMIN_USERNAME: "cant-bruteforce-this"
+      KC_ADMIN_PASSWORD: "cant-bruteforce-this"
+      KC_CLIENT_ID: "admin-cli"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - minio
+      - keycloak
+    network_mode: host  # Use host network
+
