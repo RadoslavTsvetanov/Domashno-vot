@@ -1,6 +1,6 @@
 import { envManager } from "./env";
 import axios from "axios";
-import { s3 } from "./services/s3";
+import { s3 } from "./utils/s3-config";
 
 const createBucket = async (bucketName: string) => {
   try {
@@ -8,14 +8,13 @@ const createBucket = async (bucketName: string) => {
       Bucket: bucketName,
     };
     const result = await s3.createBucket(params).promise();
-    console.log(`Bucket "${bucketName}" created successfully:`, result);
+    cons.log(`Bucket "${bucketName}" created successfully:`, result);
   } catch (error) {
     console.error("Error creating bucket:", error);
-    throw error; // Propagate error for better error handling
+    throw error; 
   }
 };
 
-// Get environment variables
 const keycloakUrl = envManager.get("KEYCLOAK_URL");
 const adminUsername = envManager.get("KC_ADMIN_USERNAME");
 const adminPassword = envManager.get("KC_ADMIN_PASSWORD");
@@ -76,8 +75,8 @@ async function createRealmAndClient() {
         directAccessGrantsEnabled: true,
         serviceAccountsEnabled: true,
         standardFlowEnabled: true, // Added for OAuth2 authorization code flow
-        webOrigins: ["*"], // Configure based on your needs
-        redirectUris: ["*"], // Configure based on your needs
+        webOrigins: ["*"], 
+        redirectUris: ["*"],
       },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -112,7 +111,6 @@ async function createRole() {
 }
 
 async function assignRoleToUser(userId: string) {
-  // Changed to string as Keycloak uses string IDs
   const token = await getAdminToken();
 
   try {
@@ -188,7 +186,7 @@ async function createUser() {
         credentials: [
           {
             type: "password",
-            value: "password123", // In production, use environment variables for passwords
+            value: "password123",
             temporary: false,
           },
         ],
@@ -273,13 +271,18 @@ async function setupKeycloak() {
     await assignRoleToUser(users[0].id);
 }
 
-async function setUpServices() {
-  try {
-    // await createBucket(envManager.get("BUCKET_NAME"))
-    const token = await getUserJWT("example-user","password123")
+async function getToken() {
+  const token = await getUserJWT("example-user","password123")
     console.log(token)
     console.log("user",await getUserInfo(token))
     console.log("All services set up successfully");
+}
+
+async function setUpServices() {
+  try {
+    // await createBucket(envManager.get("BUCKET_NAME"))
+    await getToken() 
+    // await setUpServices()
   } catch (error) {
     console.error("Error setting up services:", error.message);
   }
