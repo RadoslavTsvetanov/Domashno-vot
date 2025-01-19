@@ -1,0 +1,42 @@
+# Ignore virtual environment
+env/
+
+# Byte-compiled Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Environment and configuration files
+.env
+*.env
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Testing outputs
+.coverage
+*.coverage
+*.pytest_cache/
+htmlcov/
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Docker-specific files
+Dockerfile*
+docker-compose.yml
