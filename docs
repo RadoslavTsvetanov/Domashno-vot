@@ -18,6 +18,8 @@ see the picture in the in the dir
 
 ## How to start
 populate the .env file accordingly (see .env.example for details)
+bun init
+bun install axios dotenv
 bun run ./setUpServices.ts //uncommnet the commnedted functions if needed
 docker-compose up
 
