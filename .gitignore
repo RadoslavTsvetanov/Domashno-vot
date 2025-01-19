@@ -1,0 +1,31 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.db
+*.sqlite3
+*.log
+.env
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+*.bak
+*.swp
+*.swo
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.pnp.*
+*.tgz
+.env
+.DS_Store
+coverage/
+*.log
+
