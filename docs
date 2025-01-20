@@ -18,13 +18,16 @@ see the picture in the in the dir
 
 ## How to start
 populate the .env file accordingly (see .env.example for details)
+docker-compose up
 bun init
 bun install axios dotenv
 bun run ./setUpServices.ts //uncommnet the commnedted functions if needed
-docker-compose up
 
 
 
 # Example workflow 
-- get a token (input a curl here)
-- make a req against the backend using the token (input a curl here)
+## get a token
+bun run ./setupServices.ts
+
+##make a req against the backend using the token
+ curl http://localhost:3000/download/:id
